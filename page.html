@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Velutra Union - Discover Georgia</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      .container {
+        max-width: 1800px;
+        margin: 0 auto;
+        padding: 0 60px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(
+          135deg,
+          rgba(7, 29, 38, 0.95) 0%,
+          rgba(42, 82, 152, 0.95) 100%
+        );
+        color: white;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        /* padding: 0.5rem 0; */
+      }
+
+      header.scrolled {
+        background: rgba(7, 29, 38, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        height: 100px;
+        width: auto;
+        transition: transform 0.3s ease;
+      }
+
+      .logo:hover {
+        transform: scale(1.05);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+        gap: 3rem;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+
+      nav a:hover {
+        color: #ffd700;
+      }
+
+      nav a::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: #ffd700;
+        transition: width 0.3s ease;
+      }
+
+      nav a:hover::after {
+        width: 100%;
+      }
+
+      /* Hero Section */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Carousel Styles */
+      .hero-carousel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .carousel-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .carousel-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: scale(1.1);
+      }
+
+      .carousel-slide.active {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .carousel-slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          rgba(30, 60, 114, 0.7) 0%,
+          rgba(42, 82, 152, 0.5) 50%,
+          rgba(30, 60, 114, 0.7) 100%
+        );
+        z-index: 1;
+      }
+
+      .carousel-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        filter: brightness(0.8) contrast(1.1);
+      }
+
+      /* Carousel Navigation */
+      .carousel-nav {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+      }
+
+      .carousel-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+      }
+
+      .carousel-dot:hover {
+        background: rgba(255, 215, 0, 0.6);
+        transform: scale(1.2);
+      }
+
+      .carousel-dot.active {
+        background: #ffd700;
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.3);
+      }
+
+      /* Carousel Arrows */
+      .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 24px;
+        transition: all 0.3s ease;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+      }
+
+      .carousel-arrow:hover {
+        background: rgba(255, 215, 0, 0.2);
+        border-color: #ffd700;
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .carousel-arrow.prev {
+        left: 40px;
+      }
+
+      .carousel-arrow.next {
+        right: 40px;
+      }
+
+      /* Hero content overlay */
+      .hero-overlay {
+        position: relative;
+        z-index: 5;
+        backdrop-filter: blur(1px);
+        background: rgba(0, 0, 0, 0.1);
+        padding: 60px 40px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .hero-content {
+        opacity: 0;
+        animation: fadeInUp 1.2s ease-out 0.5s forwards;
+      }
+
+      .hero h1 {
+        font-size: 5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        letter-spacing: 2px;
+      }
+
+      .hero p {
+        font-size: 2rem;
+        margin-bottom: 3rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #333;
+        padding: 20px 40px;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      }
+
+      /* Itinerary Section */
+      .itinerary {
+        padding: 120px 0;
+        background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 3.5rem;
+        margin-bottom: 4rem;
+        color: #2a5298;
+        position: relative;
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120px;
+        height: 4px;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+      }
+
+      .day-card {
+        background: white;
+        margin: 3rem 0;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(50px);
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        min-height: 200px;
+      }
+
+      .day-card.animate {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .day-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .day-header {
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+        color: white;
+        padding: 30px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .day-header::before {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #ffd700;
+        border-radius: 50%;
+      }
+
+      .day-content {
+        padding: 40px;
+        font-size: 1.1rem;
+        line-height: 1.8;
+      }
+
+      .distance-info {
+        background: #e3f2fd;
+        padding: 12px 20px;
+        border-radius: 30px;
+        display: inline-block;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: #1565c0;
+        font-size: 1rem;
+      }
+
+      /* Inclusions Section */
+      .inclusions {
+        padding: 120px 0;
+        background: white;
+      }
+
+      .inclusion-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3rem;
+        margin-top: 3rem;
+      }
+
+      .inclusion-card {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .inclusion-card:hover {
+        border-color: #ffd700;
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .inclusion-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        color: #2a5298;
+      }
+
+      .inclusion-card h3 {
+        color: #2a5298;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+      }
+
+      .inclusion-card p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+
+      /* Footer */
+      footer {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        text-align: center;
+        padding: 4rem 0 1rem 0;
+      }
+
+      footer h3 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      footer > div > p {
+        font-size: 1.3rem;
+        /* margin-bottom: 2rem; */
+      }
+
+      .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1.2rem;
+        padding: 15px 25px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        transition: all 0.3s ease;
+      }
+
+      .contact-item:hover {
+        background: rgba(255, 215, 0, 0.2);
+        transform: translateY(-3px);
+      }
+
+      /* Animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1600px) {
+        .container {
+          max-width: 1400px;
+          padding: 0 40px;
+        }
+
+        .inclusion-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 2.5rem;
+        }
+
+        .day-card {
+          grid-template-columns: 250px 1fr;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        .container {
+          max-width: 1000px;
+          padding: 0 30px;
+        }
+
+        .day-card {
+          grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+          font-size: 4rem;
+        }
+
+        .hero p {
+          font-size: 1.8rem;
+        }
+
+        .section-title {
+          font-size: 3rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.2rem;
+        }
+
+        nav ul {
+          display: none;
+        }
+
+        .section-title {
+          font-size: 2rem;
+        }
+
+        .contact-info {
+          flex-direction: column;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .inclusion-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .container {
+          padding: 0 20px;
+        }
+
+        .carousel-arrow {
+          width: 45px;
+          height: 45px;
+          font-size: 18px;
+        }
+
+        .carousel-arrow.prev {
+          left: 15px;
+        }
+
+        .carousel-arrow.next {
+          right: 15px;
+        }
+
+        .hero-overlay {
+          padding: 40px 20px;
+          margin: 0 20px;
+        }
+
+        .carousel-nav {
+          bottom: 20px;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Loading animation for images */
+      .loading {
+        background: linear-gradient(
+          90deg,
+          #f0f0f0 25%,
+          #e0e0e0 50%,
+          #f0f0f0 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+
+      @keyframes loading {
+        0% {
+          background-position: 200% 0;
+        }
+        100% {
+          background-position: -200% 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <img src="logo.svg" alt="Velutra" class="logo" />
+
+          <nav>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#itinerary">Itinerary</a></li>
+              <li><a href="#inclusions">Inclusions</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section id="home" class="hero">
+      <!-- Carousel Background -->
+      <div class="hero-carousel">
+        <div class="carousel-container">
+          <div class="carousel-slide active">
+            <img
+              src="images/img1.jpg"
+              alt="Tbilisi Old Town"
+              class="carousel-image"
+            />
+          </div>
+          <div class="carousel-slide">
+            <img
+              src="images/img2.jpg"
+              alt="Caucasus Mountains"
+              class="carousel-image"
+            />
+          </div>
+          <div class="carousel-slide">
+            <img
+              src="images/img3.jpg"
+              alt="Jvari Monastery"
+              class="carousel-image"
+            />
+          </div>
+          <div class="carousel-slide">
+            <img
+              src="images/img4.jpg"
+              alt="Ananuri Fortress"
+              class="carousel-image"
+            />
+          </div>
+          <div class="carousel-slide">
+            <img
+              src="images/img5.jpg"
+              alt="Mount Kazbegi"
+              class="carousel-image"
+            />
+          </div>
+        </div>
+
+        <!-- Carousel Navigation -->
+        <div class="carousel-nav">
+          <div class="carousel-dot active" data-slide="0"></div>
+          <div class="carousel-dot" data-slide="1"></div>
+          <div class="carousel-dot" data-slide="2"></div>
+          <div class="carousel-dot" data-slide="3"></div>
+          <div class="carousel-dot" data-slide="4"></div>
+        </div>
+
+        <!-- Carousel Arrows -->
+        <button class="carousel-arrow prev" aria-label="Previous image">
+          ‹
+        </button>
+        <button class="carousel-arrow next" aria-label="Next image">›</button>
+      </div>
+
+      <!-- Hero Content Overlay -->
+      <div class="hero-content hero-overlay">
+        <h1>Discover Georgia</h1>
+        <p>5-Day Journey Through Mountains, History & Culture</p>
+        <a href="#itinerary" class="cta-button">Explore Itinerary</a>
+      </div>
+    </section>
+
+    <section id="itinerary" class="itinerary">
+      <div class="container">
+        <h2 class="section-title" style="color: #fff !important">
+          Your Adventure Awaits
+        </h2>
+
+        <div class="day-card">
+          <div class="day-header">Day 1: Arrival in Tbilisi</div>
+          <div class="day-content">
+            <div class="distance-info">25 km from airport</div>
+            <p>
+              Welcome to Georgia! Your travel agent will greet you at Tbilisi
+              International Airport with a nameboard. After meet and greet,
+              enjoy an individual transfer to your hotel with check-in
+              assistance. Rest and prepare for your amazing journey ahead.
+            </p>
+            <p>
+              <strong>Accommodation:</strong> Overnight in Tbilisi (Check-in:
+              15:00)
+            </p>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            Day 2: Tbilisi - Jvari Monastery - Ananuri - Gudauri
+          </div>
+          <div class="day-content">
+            <div class="distance-info">138 km (2h 45min)</div>
+            <p>
+              Start with a Tbilisi half-day city tour visiting the Holy Trinity
+              Cathedral (Sameba), one of the tallest orthodox churches. Enjoy
+              panoramic views from Europe Square and Rike Park. Take an aerial
+              cable car to Narikala Fortress and stroll through the historic
+              Sulfur Bathhouse district.
+            </p>
+            <p>
+              Continue north to visit the UNESCO World Heritage Site Jvari
+              Monastery (6th century) and the impressive Ananuri Fortress
+              (16th-17th centuries) overlooking Zhinvali Reservoir.
+            </p>
+            <p>
+              <strong>Accommodation:</strong> Dinner and overnight in Gudauri
+              (2196m altitude)
+            </p>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">
+            Day 3: Gudauri - Kazbegi - Gergeti - Dariali - Gudauri
+          </div>
+          <div class="day-content">
+            <div class="distance-info">110 km (2h 45min)</div>
+            <p>
+              Full-day exploration of the magnificent Caucasus Mountains! Visit
+              Jvari Pass (2395m) - the highest point on the road. Hike to Mount
+              Gergeti (2.5 hours round trip) to reach the medieval Gergeti
+              Trinity Church (14th century) at 2010m altitude.
+            </p>
+            <p>
+              Experience breathtaking views of Mount Kazbegi (5054m) and explore
+              Dariali Gorge near the Georgian-Russian border. Visit Gveleti
+              waterfalls and see unique megalith stone sculptures in Sno Valley
+              by local artist Merab Piranishvili.
+            </p>
+            <p>
+              <strong>Accommodation:</strong> Dinner and overnight in Gudauri
+            </p>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">Day 4: Gudauri - Mtskheta - Tbilisi</div>
+          <div class="day-content">
+            <div class="distance-info">138 km (2h 55min)</div>
+            <p>
+              Return to Tbilisi with a stop in historic Mtskheta, the former
+              capital of Eastern Georgian kingdom Iberia. Visit the magnificent
+              Svetitskhoveli Cathedral (11th century), a masterpiece of Georgian
+              renaissance architecture.
+            </p>
+            <p>
+              Complete Tbilisi city sightseeing including Rustaveli Avenue,
+              Freedom Square, the Glass Bridge of Peace, and the charming old
+              town filled with souvenir shops and art galleries. End with a
+              visit to Mtatsminda Park (770m) via funicular cable train for
+              amazing panoramic views.
+            </p>
+            <p><strong>Accommodation:</strong> Overnight in Tbilisi</p>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-header">Day 5: Departure</div>
+          <div class="day-content">
+            <p>
+              Enjoy breakfast at your hotel. Check-out time is 12:00. Transfer
+              to Tbilisi Airport for your departure. We wish you a pleasant
+              flight home with unforgettable memories of Georgia!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="inclusions" class="inclusions">
+      <div class="container">
+        <h2 class="section-title">What's Included</h2>
+        <div class="inclusion-grid">
+          <div class="inclusion-card">
+            <div class="inclusion-icon">🚗</div>
+            <h3>Transportation</h3>
+            <p>
+              Private comfortable vehicle during the tour with professional
+              guide/driver service and airport transfers
+            </p>
+          </div>
+
+          <div class="inclusion-card">
+            <div class="inclusion-icon">🏨</div>
+            <h3>Accommodation</h3>
+            <p>
+              4 overnights: 2 nights in Tbilisi (4* Brosse Garden or similar) +
+              2 nights in Gudauri (4* Gudauri Inn or similar)
+            </p>
+          </div>
+
+          <div class="inclusion-card">
+            <div class="inclusion-icon">🍽️</div>
+            <h3>Meals</h3>
+            <p>4 breakfasts (Days 2-5) and 2 dinners in Gudauri (Days 2-3)</p>
+          </div>
+
+          <div class="inclusion-card">
+            <div class="inclusion-icon">🎫</div>
+            <h3>Experiences</h3>
+            <p>
+              All excursions, entrance fees, 2 bottles of water per person
+              daily, and all taxes included
+            </p>
+          </div>
+        </div>
+
+        <div
+          style="
+            margin-top: 4rem;
+            padding: 3rem;
+            background: #fff3cd;
+            border-radius: 15px;
+            border-left: 6px solid #ffd700;
+            font-size: 1.1rem;
+          "
+        >
+          <h3 style="color: #333; margin-bottom: 1.5rem; font-size: 1.8rem">
+            Not Included:
+          </h3>
+          <p>
+            Visa fees & insurance, flight tickets, early check-in/late
+            check-out, lunches & dinners in Tbilisi, and alcoholic beverages
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="container">
+        <h3>Ready to Explore Georgia?</h3>
+        <p>Contact Velutra Union for your unforgettable Georgian adventure</p>
+        <div class="contact-info">
+          <div class="contact-item">
+            <span>📧</span>
+            <span>info@velutraunion.com</span>
+          </div>
+          <div class="contact-item">
+            <span>📱</span>
+            <span>+995 XXX XXX XXX</span>
+          </div>
+          <div class="contact-item">
+            <span>📍</span>
+            <span>Tbilisi, Georgia</span>
+          </div>
+        </div>
+        <p style="margin-top: 2rem; opacity: 0.8">
+          &copy; 2025 Velutra Union. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // Carousel functionality
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".carousel-slide");
+      const dots = document.querySelectorAll(".carousel-dot");
+      const totalSlides = slides.length;
+      let slideInterval;
+
+      function showSlide(index) {
+        // Wrap around if index is out of bounds
+        if (index >= totalSlides) {
+          currentSlide = 0;
+        } else if (index < 0) {
+          currentSlide = totalSlides - 1;
+        } else {
+          currentSlide = index;
+        }
+
+        // Remove active class from all slides and dots
+        slides.forEach((slide) => slide.classList.remove("active"));
+        dots.forEach((dot) => dot.classList.remove("active"));
+
+        // Add active class to current slide and dot
+        slides[currentSlide].classList.add("active");
+        dots[currentSlide].classList.add("active");
+      }
+
+      function nextSlide() {
+        showSlide(currentSlide + 1);
+      }
+
+      function prevSlide() {
+        showSlide(currentSlide - 1);
+      }
+
+      // Initialize carousel
+      function initCarousel() {
+        // Set up event listeners for dots
+        dots.forEach((dot, index) => {
+          dot.addEventListener("click", () => {
+            showSlide(index);
+            resetInterval();
+          });
+        });
+
+        // Set up event listeners for arrows
+        document
+          .querySelector(".carousel-arrow.next")
+          .addEventListener("click", () => {
+            nextSlide();
+            resetInterval();
+          });
+
+        document
+          .querySelector(".carousel-arrow.prev")
+          .addEventListener("click", () => {
+            prevSlide();
+            resetInterval();
+          });
+
+        // Start auto-rotation
+        startInterval();
+      }
+
+      // Auto-rotation functions
+      function startInterval() {
+        slideInterval = setInterval(nextSlide, 5000);
+      }
+
+      function resetInterval() {
+        clearInterval(slideInterval);
+        startInterval();
+      }
+
+      // Initialize the carousel when DOM is loaded
+      document.addEventListener("DOMContentLoaded", initCarousel);
+
+      // Pause on hover
+      const carousel = document.querySelector(".carousel-container");
+      carousel.addEventListener("mouseenter", () => {
+        clearInterval(slideInterval);
+      });
+
+      carousel.addEventListener("mouseleave", () => {
+        startInterval();
+      });
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") {
+          nextSlide();
+          resetInterval();
+        } else if (e.key === "ArrowLeft") {
+          prevSlide();
+          resetInterval();
+        }
+      });
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          const headerOffset = 80;
+          const elementPosition = target.offsetTop;
+          const offsetPosition = elementPosition - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        });
+      });
+
+      // Animate day cards on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px",
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate");
+          }
+        });
+      }, observerOptions);
+
+      // Observe all day cards
+      document.querySelectorAll(".day-card").forEach((card) => {
+        observer.observe(card);
+      });
+
+      // Header background change on scroll
+      // window.addEventListener("scroll", () => {
+      //   const header = document.querySelector("header");
+      //   if (window.scrollY > 100) {
+      //     header.style.background = "rgb(7, 29, 38, 0.95)";
+      //     header.style.backdropFilter = "blur(20px)";
+      //   } else {
+      //     header.style.background =
+      //       "linear-gradient(135deg, #071D26 0%, #2a5298 100%)";
+      //     header.style.backdropFilter = "blur(10px)";
+      //   }
+      // });
+
+      // Add hover effects to inclusion cards
+      document.querySelectorAll(".inclusion-card").forEach((card) => {
+        card.addEventListener("mouseenter", function () {
+          this.style.transform = "translateY(-10px) scale(1.02)";
+        });
+
+        card.addEventListener("mouseleave", function () {
+          this.style.transform = "translateY(0) scale(1)";
+        });
+      });
+
+      // Animate hero content on load
+      window.addEventListener("load", () => {
+        const heroContent = document.querySelector(".hero-content");
+        heroContent.style.opacity = "0";
+        heroContent.style.transform = "translateY(50px)";
+
+        setTimeout(() => {
+          heroContent.style.transition = "all 1s ease-out";
+          heroContent.style.opacity = "1";
+          heroContent.style.transform = "translateY(0)";
+        }, 300);
+      });
+
+      // Add parallax effect to hero section
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector(".hero");
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${speed}px)`;
+      });
+
+      // Add stagger animation to day cards
+      const dayCards = document.querySelectorAll(".day-card");
+      dayCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.2}s`;
+      });
+    </script>
+  </body>
+</html>
